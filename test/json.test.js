@@ -4,6 +4,7 @@ const Lab = require('@hapi/lab');
 const { expect } = require('@hapi/code');
 const { before, after, describe, it } = exports.lab = Lab.script();
 const { HapiServer } = require('../src/models/server/model');
+const { testCases } = require('./testCases');
 
 describe('JSON: Testing INCORRECT input ->', () => {
     let server;
@@ -42,13 +43,17 @@ describe('JSON: Testing CORRECT input ->', () => {
         await server.init();
     });
 
-    // it('Sending without data should throw 400', async () => {
-    //     const route = await server.inject({
-    //         method: 'post',
-    //         url: '/json',
-    //     });
-    //     expect(route.statusCode).to.equal(400);
-    // });
+    // Testing the test cases provided in testCases.js
+    for(let testCase of testCases){
+        it(`JSON: Testing case "${testCase.name}"`, async () => {
+            const route = await server.inject({
+                method: 'post',
+                url: '/json',
+                payload: testCase.input
+            });
+            expect(JSON.parse(route.payload)).to.equal(testCase.output);
+        });
+    }
 
     after(async () => {
         await server.stop();

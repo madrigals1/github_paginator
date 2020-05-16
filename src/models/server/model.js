@@ -60,6 +60,10 @@ class HapiServer extends Hapi.Server {
     };
 
     formatJson = (json) => {
+        // Checking if json is empty, return back empty object
+        if(Object.keys(json).length === 0 && json.constructor === Object) {
+            return {};
+        }
         for(let key of Object.keys(json)) {
             // Checking index
             const index = parseInt(key, 10);
