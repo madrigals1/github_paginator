@@ -7,116 +7,167 @@ const testCases = [
     {
         'name': 'Github Test Case',
         'input': {
-            "0": [
+            '0': [
                 {
-                    "id": 10,
-                    "title": "House",
-                    "level": 0,
-                    "children": [],
-                    "parent_id": null
+                    'id': 10,
+                    'title': 'House',
+                    'level': 0,
+                    'children': [],
+                    'parent_id': null
                 }
             ],
-            "1": [
+            '1': [
                 {
-                    "id": 12,
-                    "title": "Red Roof",
-                    "level": 1,
-                    "children": [],
-                    "parent_id": 10
+                    'id': 12,
+                    'title': 'Red Roof',
+                    'level': 1,
+                    'children': [],
+                    'parent_id': 10
                 },
                 {
-                    "id": 18,
-                    "title": "Blue Roof",
-                    "level": 1,
-                    "children": [],
-                    "parent_id": 10
+                    'id': 18,
+                    'title': 'Blue Roof',
+                    'level': 1,
+                    'children': [],
+                    'parent_id': 10
                 },
                 {
-                    "id": 13,
-                    "title": "Wall",
-                    "level": 1,
-                    "children": [],
-                    "parent_id": 10
+                    'id': 13,
+                    'title': 'Wall',
+                    'level': 1,
+                    'children': [],
+                    'parent_id': 10
                 }
             ],
-            "2": [
+            '2': [
                 {
-                    "id": 17,
-                    "title": "Blue Window",
-                    "level": 2,
-                    "children": [],
-                    "parent_id": 12
+                    'id': 17,
+                    'title': 'Blue Window',
+                    'level': 2,
+                    'children': [],
+                    'parent_id': 12
                 },
                 {
-                    "id": 16,
-                    "title": "Door",
-                    "level": 2,
-                    "children": [],
-                    "parent_id": 13
+                    'id': 16,
+                    'title': 'Door',
+                    'level': 2,
+                    'children': [],
+                    'parent_id': 13
                 },
                 {
-                    "id": 15,
-                    "title": "Red Window",
-                    "level": 2,
-                    "children": [],
-                    "parent_id": 12
+                    'id': 15,
+                    'title': 'Red Window',
+                    'level': 2,
+                    'children': [],
+                    'parent_id': 12
                 }
             ]
         },
         'output': [
             {
-                "id": 10,
-                "title": "House",
-                "level": 0,
-                "children": [
+                'id': 10,
+                'title': 'House',
+                'level': 0,
+                'children': [
                     {
-                        "id": 12,
-                        "title": "Red Roof",
-                        "level": 1,
-                        "children": [
+                        'id': 12,
+                        'title': 'Red Roof',
+                        'level': 1,
+                        'children': [
                             {
-                                "id": 15,
-                                "title": "Red Window",
-                                "level": 2,
-                                "children": [],
-                                "parent_id": 12
+                                'id': 15,
+                                'title': 'Red Window',
+                                'level': 2,
+                                'children': [],
+                                'parent_id': 12
                             },
                             {
-                                "id": 17,
-                                "title": "Blue Window",
-                                "level": 2,
-                                "children": [],
-                                "parent_id": 12
+                                'id': 17,
+                                'title': 'Blue Window',
+                                'level': 2,
+                                'children': [],
+                                'parent_id': 12
                             }
                         ],
-                        "parent_id": 10
+                        'parent_id': 10
                     },
                     {
-                        "id": 13,
-                        "title": "Wall",
-                        "level": 1,
-                        "children": [
+                        'id': 13,
+                        'title': 'Wall',
+                        'level': 1,
+                        'children': [
                             {
-                                "id": 16,
-                                "title": "Door",
-                                "level": 2,
-                                "children": [],
-                                "parent_id": 13
+                                'id': 16,
+                                'title': 'Door',
+                                'level': 2,
+                                'children': [],
+                                'parent_id': 13
                             }
                         ],
-                        "parent_id": 10
+                        'parent_id': 10
                     },
                     {
-                        "id": 18,
-                        "title": "Blue Roof",
-                        "level": 1,
-                        "children": [],
-                        "parent_id": 10
+                        'id': 18,
+                        'title': 'Blue Roof',
+                        'level': 1,
+                        'children': [],
+                        'parent_id': 10
                     }
                 ],
-                "parent_id": null
+                'parent_id': null
             }
         ]
+    },
+    {
+        'name': 'Hierarchy Test',
+        'input': {
+            '0': [
+                {
+                    'id': 10,
+                    'title': 'House',
+                    'level': 0,
+                    'children': [],
+                    'parent_id': null
+                },
+                {
+                    'id': 11,
+                    'title': 'Car',
+                    'level': 0,
+                    'children': [],
+                    'parent_id': null
+                },
+                {
+                    'id': 12,
+                    'title': 'Tree',
+                    'level': 0,
+                    'children': [],
+                    'parent_id': null
+                }
+            ]
+        },
+        'output': [
+            {
+                'id': 10,
+                'title': 'House',
+                'level': 0,
+                'children': [],
+                'parent_id': null
+            },
+            {
+                'id': 11,
+                'title': 'Car',
+                'level': 0,
+                'children': [],
+                'parent_id': null
+            },
+            {
+                'id': 12,
+                'title': 'Tree',
+                'level': 0,
+                'children': [],
+                'parent_id': null
+            }
+        ],
     }
 ];
 
