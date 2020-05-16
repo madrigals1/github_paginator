@@ -7,11 +7,7 @@ class Asset {
         if (error) {
             this.error = error;
         } else {
-            this.id = validParams.id;
-            this.title = validParams.title;
-            this.level = validParams.level;
-            this.children = validParams.children;
-            this.parent_id = validParams.parent_id;
+            Object.assign(this, validParams);
         }
     }
 }
