@@ -33,7 +33,7 @@ class HapiServer extends Hapi.Server {
     addRoutes = () => {
         // Default route for JSON formatter
         // Used specific route (endpoint) "/json" for future scalability of system
-        // Only accepts application/json, if object ContentType is incorrect, throws error 415 (Unsupported Media Type)
+        // Only accepts application/json, if object Content-Type is incorrect, throws error 415 (Unsupported Media Type)
         // If Received JSON is invalid, throws error 400 (Bad Request)
         this.route({
             options: {
