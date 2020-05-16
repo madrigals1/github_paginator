@@ -31,7 +31,7 @@ class HapiServer extends Hapi.Server {
             handler: (request, h) => {
                 const { json } = request.params;
                 if (!json) {
-                    return h.response(errors[400]).code(400);
+                    return this.error(h, 400);
                 }
                 return this.formatJson(json);
             }
@@ -45,6 +45,10 @@ class HapiServer extends Hapi.Server {
                 return 'Test route!';
             }
         });
+    };
+
+    error = (h, code) => {
+        return h.response(errors[code]).code(code);
     };
 
     formatJson = (json) => {
