@@ -22,7 +22,12 @@ class AssetList {
                 this.getAsset(this.assets[i].parent_id).children.push(this.assets[i]);
             }
         }
+        this.clear();
         return hierarchy;
+    };
+
+    static clear = () => {
+        this.assets = {};
     };
 }
 
