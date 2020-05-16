@@ -5,7 +5,9 @@
   "main": "src/index.js",
   "scripts": {
     "start": "node src/index.js",
-    "test": "lab -v"
+    "test": "npm run test:server && npm run test:json",
+    "test:server": "lab -v ./test/server.test.js",
+    "test:json": "lab -v ./test/json.test.js"
   },
   "author": "Adi Sabyrbayev",
   "license": "ISC",
