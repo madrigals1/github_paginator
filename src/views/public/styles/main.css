@@ -1,0 +1,10 @@
+div.container {
+    margin: 16px auto;
+    border: 1px solid red;
+    width: 960px;
+    padding: 8px;
+}
+
+.json {
+    font-family: "Courier New", Courier, monospace;
+}
