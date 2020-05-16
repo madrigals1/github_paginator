@@ -38,35 +38,35 @@ describe('Testing server routes', () => {
     });
 
     it('Default route should throw 404', async () => {
-        const defaultRoute = await server.inject({
+        const route = await server.inject({
             method: 'get',
             url: '/'
         });
-        expect(defaultRoute.statusCode).to.equal(404);
+        expect(route.statusCode).to.equal(404);
     });
 
     it('Random route should throw 404', async () => {
-        const randomRoute = await server.inject({
+        const route = await server.inject({
             method: 'get',
             url: '/random'
         });
-        expect(randomRoute.statusCode).to.equal(404);
+        expect(route.statusCode).to.equal(404);
     });
 
     it('/test route should throw 200', async () => {
-        const randomRoute = await server.inject({
+        const route = await server.inject({
             method: 'get',
             url: '/test'
         });
-        expect(randomRoute.statusCode).to.equal(200);
+        expect(route.statusCode).to.equal(200);
     });
 
     it('/json route should throw 200', async () => {
-        const randomRoute = await server.inject({
+        const route = await server.inject({
             method: 'get',
             url: '/json'
         });
-        expect(randomRoute.statusCode).to.equal(200);
+        expect(route.statusCode).to.equal(200);
     });
 
     after(async () => {
