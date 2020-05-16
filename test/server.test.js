@@ -12,7 +12,11 @@ describe('Server: Testing server details', () => {
     let server;
 
     before(async () => {
-        server = new HapiServer('Testing', 3001, false);
+        server = new HapiServer({
+            name: 'Testing',
+            port: 3001,
+            logs: false
+        });
         await server.init();
     });
 
@@ -33,7 +37,11 @@ describe('Server: Testing server routes', () => {
     let server;
 
     before(async () => {
-        server = new HapiServer('Testing', 3001, false);
+        server = new HapiServer({
+            name: 'Testing',
+            port: 3001,
+            logs: false
+        });
         await server.init();
     });
 

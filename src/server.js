@@ -4,17 +4,14 @@ const Hapi = require('@hapi/hapi');
 const { errors } = require('./static/errors');
 
 class HapiServer extends Hapi.Server {
-    name = 'Server Name';
-    logs = false;
-
     // Added variable host for future use of Docker e.g.
-    constructor(name, port, logs = false, host = 'localhost') {
+    constructor(params) {
         super({
-            port: port,
-            host: host
+            port: params.port || 3001,
+            host: params.host || 'localhost'
         });
-        this.logs = logs;
-        this.name = name;
+        this.logs = params.logs !== undefined ? params.logs : true;
+        this.name = params.name || 'Server Name';
     }
 
     init = async () => {
