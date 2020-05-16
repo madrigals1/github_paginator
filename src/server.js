@@ -1,7 +1,7 @@
 'use strict';
 
 const Hapi = require('@hapi/hapi');
-const { errors } = require('./static/errors');
+const Boom = require('boom');
 
 class HapiServer extends Hapi.Server {
     // Added variable host for future use of Docker e.g.
@@ -24,22 +24,26 @@ class HapiServer extends Hapi.Server {
 
     addRoutes = () => {
         // Default route for JSON formatter
-        // Used specific route (endpoint) for future scalability of system
+        // Used specific route (endpoint) "/json" for future scalability of system
+        // Only accepts application/json, if object ContentType is incorrect, throws error 415 (Unsupported Media Type)
+        // If Received JSON is invalid, throws error 400 (Bad Request)
         this.route({
-            method: 'GET',
-            path: '/json',
-            handler: (request, h) => {
-                const { json } = request.params;
-                if (!json) {
-                    return this.error(h, 400);
+            options: {
+                payload: {
+                    allow: "application/json"
                 }
-                return this.formatJson(json);
+            },
+            method: 'post',
+            path: '/json',
+            handler: (request) => {
+                if (!request.payload) return Boom.badRequest('Please, provide JSON file in your request');
+                return this.formatJson(request.payload);
             }
         });
 
         // Test Route
         this.route({
-            method: 'GET',
+            method: 'get',
             path: '/test',
             handler: () => {
                 return 'Test route!';
@@ -47,13 +51,9 @@ class HapiServer extends Hapi.Server {
         });
     };
 
-    error = (h, code) => {
-        return h.response(errors[code]).code(code);
-    };
-
     formatJson = (json) => {
         return json;
     };
 }
 
-module.exports = { HapiServer };
+module.exports = {HapiServer};

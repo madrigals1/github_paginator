@@ -10,7 +10,8 @@
   "author": "Adi Sabyrbayev",
   "license": "ISC",
   "dependencies": {
-    "@hapi/hapi": "^19.1.1"
+    "@hapi/hapi": "^19.1.1",
+    "boom": "^7.3.0"
   },
   "devDependencies": {
     "@hapi/code": "^8.0.1",

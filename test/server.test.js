@@ -5,23 +5,23 @@ const { expect } = require('@hapi/code');
 const { before, after, describe, it } = exports.lab = Lab.script();
 const { HapiServer } = require('../src/server');
 
-// Will initialize testing server on different port.
+// Will initialize testing servers on different ports.
 // This way they won't conflict with main server instance
 
-describe('Server: Testing server details', () => {
+describe('Server: Testing server details ->', () => {
     let server;
 
     before(async () => {
         server = new HapiServer({
-            name: 'Testing',
+            name: 'Details Testing',
             port: 3001,
             logs: false
         });
         await server.init();
     });
 
-    it('Server name should be "Testing"', async () => {
-        expect(server.name).to.equal('Testing');
+    it('Server name should be "Details Testing"', async () => {
+        expect(server.name).to.equal('Details Testing');
     });
 
     it('Server port should be 3001', async () => {
@@ -33,13 +33,13 @@ describe('Server: Testing server details', () => {
     });
 });
 
-describe('Server: Testing server routes', () => {
+describe('Server: Testing server routes -> ', () => {
     let server;
 
     before(async () => {
         server = new HapiServer({
-            name: 'Testing',
-            port: 3001,
+            name: 'Routes Testing',
+            port: 3002,
             logs: false
         });
         await server.init();
@@ -71,7 +71,7 @@ describe('Server: Testing server routes', () => {
 
     it('/json route without payload should throw 400', async () => {
         const route = await server.inject({
-            method: 'get',
+            method: 'post',
             url: '/json'
         });
         expect(route.statusCode).to.equal(400);
