@@ -1,9 +1,9 @@
 'use strict';
 
 const Lab = require('@hapi/lab');
-const { expect } = require('@hapi/code');
-const { before, after, describe, it } = exports.lab = Lab.script();
-const { HapiServer } = require('../src/models/server/model');
+const {expect} = require('@hapi/code');
+const {before, after, describe, it} = exports.lab = Lab.script();
+const {HapiServer} = require('../src/models/server/model');
 
 // Will initialize testing servers on different ports.
 // This way they won't conflict with main server instance

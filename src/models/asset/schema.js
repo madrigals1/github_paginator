@@ -1,3 +1,5 @@
+'use strict';
+
 const Joi = require('@hapi/joi');
 
 const schema = Joi.object({
@@ -29,4 +31,4 @@ const validate = (object) => {
     return schema.validate(object);
 };
 
-module.exports = { validate };
+module.exports = {validate};

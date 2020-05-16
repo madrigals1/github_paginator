@@ -1,10 +1,10 @@
 'use strict';
 
 const Lab = require('@hapi/lab');
-const { expect } = require('@hapi/code');
-const { before, after, describe, it } = exports.lab = Lab.script();
-const { HapiServer } = require('../src/models/server/model');
-const { testCases } = require('./testCases');
+const {expect} = require('@hapi/code');
+const {before, after, describe, it} = exports.lab = Lab.script();
+const {HapiServer} = require('../src/models/server/model');
+const {testCases} = require('./testCases');
 
 describe('JSON: Testing INCORRECT input ->', () => {
     let server;
@@ -31,7 +31,7 @@ describe('JSON: Testing INCORRECT input ->', () => {
             method: 'post',
             url: '/json',
             payload: 'Random text',
-            headers: { 'Content-Type': 'text/html' }
+            headers: {'Content-Type': 'text/html'}
         });
         expect(route.statusCode).to.equal(415);
     });
@@ -65,7 +65,7 @@ describe('JSON: Testing CORRECT input ->', () => {
     });
 
     // Testing the test cases provided in testCases.js
-    for(let testCase of testCases){
+    for (let testCase of testCases) {
         it(`JSON: Testing case "${testCase.name}"`, async () => {
             const route = await server.inject({
                 method: 'post',

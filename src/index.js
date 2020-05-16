@@ -1,4 +1,4 @@
-const { HapiServer } = require('./models/server/model');
+const {HapiServer} = require('./models/server/model');
 
 const mainServer = new HapiServer({
     name: 'Main',

@@ -26,4 +26,4 @@ const validate = (params) => {
     return schema.validate(params);
 };
 
-module.exports = { validate };
+module.exports = {validate};

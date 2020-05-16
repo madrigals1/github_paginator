@@ -1,9 +1,11 @@
-const { validate } = require('./schema');
+'use strict';
+
+const {validate} = require('./schema');
 
 class Asset {
-    constructor(params){
+    constructor(params) {
         const validation = validate(params);
-        const { error, value: validParams } = validation;
+        const {error, value: validParams} = validation;
         if (error) {
             this.error = error;
         } else {

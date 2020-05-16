@@ -2,16 +2,16 @@
 
 const Hapi = require('@hapi/hapi');
 const Boom = require('boom');
-const { Asset } = require('../asset/model');
-const { validate } = require('./schema');
-const { AssetList } = require('../assetlist/model');
+const {Asset} = require('../asset/model');
+const {validate} = require('./schema');
+const {AssetList} = require('../assetlist/model');
 
 class HapiServer extends Hapi.Server {
     // Added variable host for future use of Docker e.g.
     constructor(params) {
         // Need to validate params before creating server. Will not make unit tests to this part, too trivial
         const validation = validate(params);
-        const { error, value: validParams } = validation;
+        const {error, value: validParams} = validation;
         if (error) throw error;
 
         super({
@@ -60,33 +60,29 @@ class HapiServer extends Hapi.Server {
     };
 
     formatJson = (json) => {
-        // Checking if json is empty, return back empty object
-        if(Object.keys(json).length === 0 && json.constructor === Object) {
-            return {};
-        }
-        for(let key of Object.keys(json)) {
+        for (let key of Object.keys(json)) {
             // Checking index
             const index = parseInt(key, 10);
-            if(isNaN(index)) {
+            if (isNaN(index)) {
                 return Boom.badData('Incorrect JSON format. Indexes of objects aren\'t number');
             }
 
             // Checking every level of objects to be Array
             const objectArray = json[key];
-            if(!Array.isArray(objectArray)) {
+            if (!Array.isArray(objectArray)) {
                 return Boom.badData('Incorrect JSON format. Needs to be array of objects on every level');
             }
 
             // Checking each object
-            for(let object of objectArray) {
+            for (let object of objectArray) {
                 const asset = new Asset(object);
-                if(asset.error) {
+                if (asset.error) {
                     return Boom.badData(`Incorrect JSON format. ${asset.error}`);
                 }
                 AssetList.addAsset(asset);
             }
         }
-        return AssetList.modifyAssets();
+        return AssetList.getAssetsHierarchy();
     };
 }
 
