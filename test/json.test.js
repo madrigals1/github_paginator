@@ -58,7 +58,7 @@ describe('JSON: Testing CORRECT input ->', () => {
     before(async () => {
         server = new HapiServer({
             name: 'JSON Testing',
-            port: 3001,
+            port: 3003,
             logs: false
         });
         await server.init();
@@ -72,6 +72,7 @@ describe('JSON: Testing CORRECT input ->', () => {
                 url: '/json',
                 payload: testCase.input
             });
+            // Route payload (string), testCase.output (object)
             expect(JSON.parse(route.payload)).to.equal(testCase.output);
         });
     }
