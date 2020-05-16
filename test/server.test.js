@@ -8,11 +8,11 @@ const { HapiServer } = require('../src/server');
 // Will initialize testing server on different port.
 // This way they won't conflict with main server instance
 
-describe('Testing server details', () => {
+describe('Server: Testing server details', () => {
     let server;
 
     before(async () => {
-        server = new HapiServer('Testing', 3001);
+        server = new HapiServer('Testing', 3001, false);
         await server.init();
     });
 
@@ -29,11 +29,11 @@ describe('Testing server details', () => {
     });
 });
 
-describe('Testing server routes', () => {
+describe('Server: Testing server routes', () => {
     let server;
 
     before(async () => {
-        server = new HapiServer('Testing', 3001);
+        server = new HapiServer('Testing', 3001, false);
         await server.init();
     });
 
@@ -61,12 +61,12 @@ describe('Testing server routes', () => {
         expect(route.statusCode).to.equal(200);
     });
 
-    it('/json route should throw 200', async () => {
+    it('/json route without payload should throw 400', async () => {
         const route = await server.inject({
             method: 'get',
             url: '/json'
         });
-        expect(route.statusCode).to.equal(200);
+        expect(route.statusCode).to.equal(400);
     });
 
     after(async () => {

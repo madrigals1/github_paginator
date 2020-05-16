@@ -1,23 +1,27 @@
 'use strict';
 
 const Hapi = require('@hapi/hapi');
+const { errors } = require('./static/errors');
 
 class HapiServer extends Hapi.Server {
     name = 'Server Name';
+    logs = false;
 
     // Added variable host for future use of Docker e.g.
-    constructor(name, port, host = 'localhost') {
+    constructor(name, port, logs = false, host = 'localhost') {
         super({
             port: port,
             host: host
         });
+        this.logs = logs;
         this.name = name;
     }
 
     init = async () => {
         this.addRoutes();
         await this.start().then(() => {
-            console.log('Server "%s" running on %s', this.name, this.info.uri);
+            if (this.logs)
+                console.log('Server "%s" running on %s', this.name, this.info.uri);
         });
     };
 
@@ -27,10 +31,10 @@ class HapiServer extends Hapi.Server {
         this.route({
             method: 'GET',
             path: '/json',
-            handler: (request) => {
+            handler: (request, h) => {
                 const { json } = request.params;
-                if (!json || !IsJsonString(json)) {
-                    return 'Error! Json string is not valid!';
+                if (!json) {
+                    return h.response(errors[400]).code(400);
                 }
                 return this.formatJson(json);
             }
