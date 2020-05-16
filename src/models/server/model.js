@@ -19,7 +19,7 @@ class HapiServer extends Hapi.Server {
             host: validParams.host
         });
 
-        this.logs = validParams.logs || true;
+        this.logs = validParams.logs;
         this.name = validParams.name;
     }
 
