@@ -47,9 +47,6 @@ class HapiServer extends Hapi.Server {
      * - HTTP errors 400, 415, 422 if JSON is not valid.
      * - Formatted JSON if JSON is valid.
      * these can be used in unit tests.
-     *
-     * @param {route} json - Route used for JSON formatting
-     * @param {route} test - Test Route, used for testing
      */
     addRoutes = () => {
         /**
