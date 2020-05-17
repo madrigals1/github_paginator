@@ -73,7 +73,7 @@ class HapiServer extends Hapi.Server {
         this.route({
             options: {
                 payload: {
-                    allow: "application/json"
+                    allow: 'application/json'
                 }
             },
             method: 'post',
