@@ -6,6 +6,10 @@ const {before, after, describe, it} = exports.lab = Lab.script();
 const {HapiServer} = require('../src/models/server/model');
 const {testCases} = require('./testCases');
 
+/**
+ * Testing server initialize on ports different from 'Main' server instance.
+ * This way they won't conflict.
+ */
 describe('JSON: Testing INCORRECT input ->', () => {
     let server;
 
@@ -64,7 +68,9 @@ describe('JSON: Testing CORRECT input ->', () => {
         await server.init();
     });
 
-    // Testing the test cases provided in testCases.js
+    /**
+     * Testing all the test cases provided in testCases.js
+     */
     for (let testCase of testCases) {
         it(`JSON: Testing case "${testCase.name}"`, async () => {
             const route = await server.inject({
@@ -72,7 +78,6 @@ describe('JSON: Testing CORRECT input ->', () => {
                 url: '/json',
                 payload: testCase.input
             });
-            // Route payload (string), testCase.output (object)
             expect(JSON.parse(route.payload)).to.equal(testCase.output);
         });
     }

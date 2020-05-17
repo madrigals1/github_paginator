@@ -5,9 +5,10 @@ const {expect} = require('@hapi/code');
 const {before, after, describe, it} = exports.lab = Lab.script();
 const {HapiServer} = require('../src/models/server/model');
 
-// Will initialize testing servers on different ports.
-// This way they won't conflict with main server instance
-
+/**
+ * Testing server initialize on ports different from 'Main' server instance.
+ * This way they won't conflict.
+ */
 describe('Server: Testing server details ->', () => {
     let server;
 
