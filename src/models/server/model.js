@@ -4,6 +4,7 @@ const Hapi = require('@hapi/hapi');
 const Boom = require('boom');
 const {Asset} = require('../asset/model');
 const {validate} = require('./schema');
+const pagination = require('../pagination/model');
 
 /**
  * This class extends Hapi.Server, and adds new params 'logs' and 'name'.
@@ -34,6 +35,14 @@ class HapiServer extends Hapi.Server {
      * 'name' and 'address' of the server
      */
     init = async () => {
+        await this.register([require('@hapi/vision')]);
+
+        this.views({
+            engines: {
+                html: require('handlebars')
+            },
+            path: __dirname + '../../../views',
+        });
         this.addRoutes();
         await this.start().then(() => {
             if (this.logs) console.log(`Server "${this.name}" running on ${this.info.uri}`);
@@ -49,6 +58,62 @@ class HapiServer extends Hapi.Server {
      * these can be used in unit tests.
      */
     addRoutes = () => {
+        const paginationParams = async (h) => {
+            const currentPage = await pagination.getCurrentPage();
+            const {params} = pagination;
+            const currentPageNumber = params.page;
+
+            // Setting paginator to show background
+            const paginator = [];
+            for(let i = 1; i < 11; i++){
+                if(i === currentPageNumber) {
+                    paginator.push({
+                        page:i,
+                        active: true
+                    });
+                } else {
+                    paginator.push({
+                        page:i,
+                        active: false
+                    });
+                }
+            }
+
+            return h.view('index', {
+                page: currentPage,
+                pageNumber: currentPageNumber,
+                paginator,
+            });
+        };
+
+        this.route({
+            method: 'get',
+            path: '/main',
+            handler: async (request, h) => {
+                let page = parseInt(request.query.page);
+                if (!page) page = 1;
+
+                pagination.setPage(page);
+                return await paginationParams(h);
+            }
+        });
+
+        this.route({
+            method: 'get',
+            path: '/next',
+            handler: async (request, h) => {
+                return h.redirect(`/main?page=${pagination.getNextPage()}`);
+            }
+        });
+
+        this.route({
+            method: 'get',
+            path: '/prev',
+            handler: async (request, h) => {
+                return h.redirect(`/main?page=${pagination.getPreviousPage()}`);
+            }
+        });
+
         /**
          * This route returns the modified JSON file by the format provided in
          * https://github.com/pomelofashion/challenges/tree/master/challenge-nodejs
