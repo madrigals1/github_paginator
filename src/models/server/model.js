@@ -54,7 +54,7 @@ class HapiServer extends Hapi.Server {
             engines: {
                 html: require('handlebars')
             },
-            path: __dirname + '../../../views',
+            path: [__dirname + '../../../views', __dirname + '../../../../docs'],
         });
 
         this.addRoutes();
@@ -64,14 +64,74 @@ class HapiServer extends Hapi.Server {
     };
 
     /**
+     * This method gets:<br>
+     * - Current page data from <b>Pagination</b> object<br>
+     * - Creates <b>paginator</b> with active and inactive pages for <b>handlebars</b><br>
+     * <br>
+     * Sends values to main.html
+     *
+     * @method
+     * @param {object} h - reply object
+     * @returns {void} action that displays provided data into <b>HTML</b> file
+     */
+    paginate = async (h) => {
+        const currentPage = await pagination.getCurrentPage();
+        const {page} = pagination.params;
+
+        const paginator = [];
+        for(let i = 1; i < 11; i++){
+            if(i === page) {
+                paginator.push({
+                    page:i,
+                    active: true
+                });
+            } else {
+                paginator.push({
+                    page:i,
+                    active: false
+                });
+            }
+        }
+
+        return h.view('main', {
+            page: currentPage,
+            paginator,
+        });
+    };
+
+    /**
      * This method adds <b>routes</b> (endpoints) to the server. Every route will return:<br>
-     * - Test text if test route.<br>
      * - HTTP error <b>404</b> if route doesn't exist.<br>
      * - HTTP errors <b>400</b>, <b>415</b>, <b>422</b> if provided data is not valid.<br>
      *
      * @method
      */
     addRoutes = () => {
+        this.route({
+            method: 'get',
+            path: '/docs',
+            handler: (request, h) => {
+                return h.redirect('/docs/index.html');
+            }
+        });
+
+        /**
+         * Route for serving doc files
+         */
+        this.route({
+            method: 'GET',
+            path: '/docs/{file*}',
+            handler: {
+                directory: {
+                    path: 'docs/',
+                    listing: true
+                }
+            }
+        });
+
+        /**
+         * Route for serving static files
+         */
         this.route({
             method: 'GET',
             path: '/public/{file*}',
@@ -84,57 +144,24 @@ class HapiServer extends Hapi.Server {
         });
 
         /**
-         * This method gets current page, creates paginator and sends all the
-         * values to index.html
-         *
-         * @param {httpRequest} h - request that should
-         * @returns {Promise<*>}
+         * Main route for pagination
          */
-        const paginate = async (h) => {
-            console.log(typeof(h));
-            const currentPage = await pagination.getCurrentPage();
-            const {params} = pagination;
-            const currentPageNumber = params.page;
-
-            // Setting paginator to show background
-            const paginator = [];
-            for(let i = 1; i < 11; i++){
-                if(i === currentPageNumber) {
-                    paginator.push({
-                        page:i,
-                        active: true
-                    });
-                } else {
-                    paginator.push({
-                        page:i,
-                        active: false
-                    });
-                }
-            }
-
-            return h.view('index', {
-                page: currentPage,
-                pageNumber: currentPageNumber,
-                paginator,
-            });
-        };
-
         this.route({
             method: 'get',
             path: '/main',
-            handler: async (request, h) => {
+            handler: (request, h) => {
                 let page = parseInt(request.query.page);
                 if (!page) page = 1;
 
                 pagination.setPage(page);
-                return await paginate(h);
+                return this.paginate(h);
             }
         });
 
         this.route({
             method: 'get',
             path: '/next',
-            handler: async (request, h) => {
+            handler: (request, h) => {
                 return h.redirect(`/main?page=${pagination.getNextPage()}`);
             }
         });
@@ -142,7 +169,7 @@ class HapiServer extends Hapi.Server {
         this.route({
             method: 'get',
             path: '/prev',
-            handler: async (request, h) => {
+            handler: (request, h) => {
                 return h.redirect(`/main?page=${pagination.getPreviousPage()}`);
             }
         });
@@ -179,17 +206,6 @@ class HapiServer extends Hapi.Server {
             handler: (request) => {
                 if (!request.payload) return Boom.badRequest('Please, provide JSON file in your request');
                 return this.formatJson(request.payload);
-            }
-        });
-
-        /**
-         * Test route, to use in unit tests
-         */
-        this.route({
-            method: 'get',
-            path: '/test',
-            handler: () => {
-                return 'Test route!';
             }
         });
     };

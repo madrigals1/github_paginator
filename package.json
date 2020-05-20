@@ -1,6 +1,6 @@
 {
   "name": "pomelo_challenge",
-  "version": "1.6.0",
+  "version": "1.6.1",
   "description": "Challenge task for Pomelo",
   "main": "src/index.js",
   "scripts": {
@@ -8,7 +8,8 @@
     "test": "npm run test:server && npm run test:json",
     "test:server": "lab -v ./test/server.test.js",
     "test:json": "lab -v ./test/json.test.js",
-    "doc": "jsdoc -c docs/conf/config.json"
+    "doc": "jsdoc -c docs/conf/config.json",
+    "postinstall": "npm run doc"
   },
   "author": "Adi Sabyrbayev",
   "license": "ISC",
