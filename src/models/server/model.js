@@ -38,6 +38,7 @@ class HapiServer extends Hapi.Server {
   }
 
     /**
+     * Server initialization <br>
      * This method:<br>
      * - Activates <b>@hapi/vision</b> and <b>@hapi/inert</b><br>
      * - Activates and configures <b>handlebars</b> as default template engine<br>
@@ -63,6 +64,7 @@ class HapiServer extends Hapi.Server {
     };
 
     /**
+     * Pagination <br>
      * This method gets:<br>
      * - Current page data from <b>Pagination</b> object<br>
      * - Creates <b>paginator</b> with active and inactive pages for <b>handlebars</b><br>
@@ -99,6 +101,7 @@ class HapiServer extends Hapi.Server {
     };
 
     /**
+     * Adding routes to server <br>
      * This method adds <b>routes</b> (endpoints) to the server. Every route will return:<br>
      * - HTTP error <b>404</b> if route doesn't exist.<br>
      * - HTTP errors <b>400</b>, <b>415</b>, <b>422</b> if provided data is not valid.<br>
@@ -204,6 +207,7 @@ class HapiServer extends Hapi.Server {
     };
 
     /**
+     * JSON Validity Checker <br>
      * This method checks the JSON for validity:<br>
      * - If JSON is <b>valid</b>, returns array of valid Assets<br>
      * - If JSON is <b>invalid</b>, return error with specific error message<br>
@@ -249,6 +253,7 @@ class HapiServer extends Hapi.Server {
     };
 
     /**
+     * JSON Hierarchy maker <br>
      * This function iterates through every object by key (ID):<br>
      * - If the object in the iteration has <b>no parent id</b>, adds it to hierarchy array.<br>
      * - If the object in the iteration has <b>parent id</b>, adds it to children array
@@ -290,6 +295,7 @@ class HapiServer extends Hapi.Server {
     };
 
     /**
+     * JSON Formatter <br>
      * This function checks the validity of the object and returns formatted object array.
      * If validation fails, it throws HTTP error 422.
      *

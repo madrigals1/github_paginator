@@ -1,6 +1,6 @@
 {
   "name": "pomelo_challenge",
-  "version": "1.7.0",
+  "version": "1.7.1",
   "description": "Challenge task for Pomelo",
   "main": "src/index.js",
   "scripts": {
