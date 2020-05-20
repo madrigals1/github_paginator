@@ -1,4 +1,5 @@
 .idea
 node_modules
-.env
 docs
+!docs/conf/config.json
+.env

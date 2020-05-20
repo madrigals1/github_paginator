@@ -1,0 +1,15 @@
+{
+  "source": {
+    "includePattern": ".+\\.js(doc|x)?$",
+    "include": ["."],
+    "exclude": ["node_modules"]
+  },
+  "recurseDepth": 10,
+  "opts": {
+    "destination": "./docs/",
+    "recurse": true
+  },
+  "templates": {
+    "sort": false
+  }
+}
