@@ -1,7 +1,7 @@
 const {HapiServer} = require('./models/server/model');
 
 /**
- * Initializing the server, by default logs = true
+ * Initializing the server, by default <b>canShowLogs = true</b>
  * @type {HapiServer}
  */
 const mainServer = new HapiServer({

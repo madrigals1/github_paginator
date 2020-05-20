@@ -16,7 +16,7 @@ describe('Server: Testing server details ->', () => {
         server = new HapiServer({
             name: 'Details Testing',
             port: 3001,
-            logs: false
+            canShowLogs: false
         });
         await server.init();
     });
@@ -41,7 +41,7 @@ describe('Server: Testing server routes -> ', () => {
         server = new HapiServer({
             name: 'Routes Testing',
             port: 3002,
-            logs: false
+            canShowLogs: false
         });
         await server.init();
     });

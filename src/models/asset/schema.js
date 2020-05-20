@@ -3,16 +3,10 @@
 const Joi = require('@hapi/joi');
 
 /**
- * Schema used for validation of Asset class in asset/model.js
- *
- * @param {number} id
- * @param {string} title
- * @param {number} level - hierarchical level of the Asset
- * @param {number[]} children - children of the Asset, by default should be empty
- * @param {number} parent_id - id of the parent Asset, can be null to represent
- * top level Asset
+ * Schema used for validation of Asset class
+ * @type {Asset}
  */
-const schema = Joi.object({
+const AssetSchema = Joi.object({
     id: Joi.number()
         .integer()
         .min(0)
@@ -38,13 +32,14 @@ const schema = Joi.object({
 });
 
 /**
- * Validation of given object using schema provided above
+ * Validation of given object using AssetSchema
  *
- * @param {Object} params - object that needs to be validated
- * @returns {Object} validated object
+ * @method
+ * @param {object} params - object that needs to be validated
+ * @returns {object} validated object
  */
-const validate = (params) => {
-    return schema.validate(params);
+const validateAsset = (params) => {
+    return AssetSchema.validate(params);
 };
 
-module.exports = {validate};
+module.exports = {validateAsset};

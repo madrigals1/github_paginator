@@ -17,7 +17,7 @@ describe('JSON: Testing INCORRECT input ->', () => {
         server = new HapiServer({
             name: 'JSON Testing',
             port: 3001,
-            logs: false
+            canShowLogs: false
         });
         await server.init();
     });
@@ -63,7 +63,7 @@ describe('JSON: Testing CORRECT input ->', () => {
         server = new HapiServer({
             name: 'JSON Testing',
             port: 3003,
-            logs: false
+            canShowLogs: false
         });
         await server.init();
     });

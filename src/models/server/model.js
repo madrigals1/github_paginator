@@ -3,22 +3,27 @@
 const Hapi = require('@hapi/hapi');
 const Boom = require('boom');
 const {Asset} = require('../asset/model');
-const {validate} = require('./schema');
+const {validateHapiServer} = require('./schema');
 const pagination = require('../pagination/model');
 
 /**
- * This class extends Hapi.Server, and adds new params 'logs' and 'name'.
- * All the params should get validated before creating the object.
- * If any of the params are not valid, error will be thrown.
- *
- * 'port' and 'host' params will be sent to superclass Hapi.Server
+ * <b>HapiServer</b> - extends Hapi.Server, adds new params <b>'canShowLogs'</b> and <b>'name'</b>.
+ * <b>Params</b> of HapiServer will get <b>validated</b> before assigning to HapiServer object.
+ * Invalid data will throw <b>Node</b> error.<br>
+ * <br>
+ * <b>'port'</b> and <b>'host'</b> params will be sent to superclass Hapi.Server
  *
  * @constructor
- * @param {object} params - Object with list of params, provided in server/schema.js
+ * @param {object} params - Object with list the of params, provided in server/schema.js
+ * @param {string} params.name - Server name, only used to display in logs
+ * @param {number} params.port - Server port, used to run server on specific port.
+ * Should set unused port in your Device
+ * @param {string} params.host - Server domain, can use localhost for your local PC
+ * @param {boolean} params.canShowlogs - if on, server will show logs
  */
 class HapiServer extends Hapi.Server {
     constructor(params) {
-        const {error, value: validParams} = validate(params);
+        const {error, value: validParams} = validateHapiServer(params);
         if (error) throw error;
 
         super({
@@ -26,13 +31,18 @@ class HapiServer extends Hapi.Server {
             host: validParams.host
         });
 
-        this.logs = validParams.logs;
+        this.canShowLogs = validParams.canShowLogs;
         this.name = validParams.name;
     }
 
     /**
-     * This function adds routes, starts the server and logs in the console
-     * 'name' and 'address' of the server
+     * This method:<br>
+     * - Activates <b>@hapi/vision</b> and <b>@hapi/inert</b><br>
+     * - Activates and configures <b>handlebars</b> as default template engine<br>
+     * - Adds routes<br>
+     * - Starts the server and logs server data in the console<br>
+     *
+     * @method
      */
     init = async () => {
         await this.register([
@@ -46,22 +56,22 @@ class HapiServer extends Hapi.Server {
             },
             path: __dirname + '../../../views',
         });
+
         this.addRoutes();
         await this.start().then(() => {
-            if (this.logs) console.log(`Server "${this.name}" running on ${this.info.uri}`);
+            if (this.canShowLogs) console.log(`Server "${this.name}" running on ${this.info.uri}`);
         });
     };
 
     /**
-     * Routes (endpoints) used by the server. Every route will return:
-     * - Test text if test route.
-     * - HTTP error 404 if route doesn't exist.
-     * - HTTP errors 400, 415, 422 if JSON is not valid.
-     * - Formatted JSON if JSON is valid.
-     * these can be used in unit tests.
+     * This method adds <b>routes</b> (endpoints) to the server. Every route will return:<br>
+     * - Test text if test route.<br>
+     * - HTTP error <b>404</b> if route doesn't exist.<br>
+     * - HTTP errors <b>400</b>, <b>415</b>, <b>422</b> if provided data is not valid.<br>
+     *
+     * @method
      */
     addRoutes = () => {
-        // Serving static files
         this.route({
             method: 'GET',
             path: '/public/{file*}',
@@ -73,7 +83,15 @@ class HapiServer extends Hapi.Server {
             }
         });
 
-        const paginationParams = async (h) => {
+        /**
+         * This method gets current page, creates paginator and sends all the
+         * values to index.html
+         *
+         * @param {httpRequest} h - request that should
+         * @returns {Promise<*>}
+         */
+        const paginate = async (h) => {
+            console.log(typeof(h));
             const currentPage = await pagination.getCurrentPage();
             const {params} = pagination;
             const currentPageNumber = params.page;
@@ -109,7 +127,7 @@ class HapiServer extends Hapi.Server {
                 if (!page) page = 1;
 
                 pagination.setPage(page);
-                return await paginationParams(h);
+                return await paginate(h);
             }
         });
 
@@ -177,20 +195,21 @@ class HapiServer extends Hapi.Server {
     };
 
     /**
-     * This method checks the JSON for validity:
-     * - If JSON is valid, returns list of valid Assets
-     * - If JSON is invalid, return error
+     * This method checks the JSON for validity:<br>
+     * - If JSON is <b>valid</b>, returns array of valid Assets<br>
+     * - If JSON is <b>invalid</b>, return error with specific error message<br>
+     *<br>
+     * Steps:<br>
+     * 1) We check index (key) on the top level, if not number, return <b>error</b><br>
+     * 2) We check value of every level, if not array, return <b>error</b><br>
+     * 3) We check every element of Array and validate using Joi:<br>
+     * - if <b>not valid</b> Asset object, return <b>error</b><br>
+     * - if <b>valid</b> Asset object, add it to <b>AssetList</b><br>
+     * 4) If <b>no errors</b>, we return <b>AssetList</b><br>
      *
-     * Steps:
-     * 1) We check index (key) on the top level, if not number, return error
-     * 2) We check value of every level, if not array, return false
-     * 3) We check every element of Array and validate using Joi:
-     * - if not valid Asset object, return false
-     * - if valid Asset object, add it to AssetList
-     * 4) If no errors, we return assetList
-     *
-     * @param jsonObject
-     * @returns {*}
+     * @method
+     * @param {object} jsonObject - JSON object with id as <b>key</b> and object as <b>value</b>
+     * @returns {array} array of JSON objects
      */
     isValidJson = (jsonObject) => {
         const assetList = {};
@@ -217,34 +236,38 @@ class HapiServer extends Hapi.Server {
     };
 
     /**
-     * This function iterates through every object by key (ID):
-     * - If the object in the iteration has no parent id, adds it to hierarchy array.
-     * - If the object in the iteration has parent id, adds it to children array of parent.
-     *
+     * This function iterates through every object by key (ID):<br>
+     * - If the object in the iteration has <b>no parent id</b>, adds it to hierarchy array.<br>
+     * - If the object in the iteration has <b>parent id</b>, adds it to children array of parent.<br>
+     * <br>
      * Returns the objects in the correct hierarchy, top objects on top, children objects
-     * inside children array of top objects.
+     * inside children array of top objects. <br>
+     * <br>
+     * Time complexity = O(n) <br>
+     * Space complexity = O(n) <br>
      *
-     *
-     * Time complexity = O(n)
-     * Space complexity = O(n)
-     *
+     * @method
      * @param {object} assets - object with all the objects of JSON in 'key-value' format
-     * @returns {object[]} hierarchy - array of objects with correct format
+     * @returns {object[]} Array of objects in the correct hierarchy
      * @example
-     *     hierarchy = []
-     *     foreach object of objectArray:
-     *       if object has parent_id:
+     * hierarchy = []
+     * foreach object of objectArray:
+     *     if object has parent_id:
      *         assets[parent_id].children.add(object)
-     *       else:
+     *     else:
      *         hierarchy.add(object)
-     *     return hierarchy
+     * return hierarchy
      */
     getAssetsHierarchy = (assets) => {
         const hierarchy = [];
         for (let key of Object.keys(assets)) {
-            if (assets[key].parent_id === null) {
+            const pid = assets[key].parent_id;
+            if (pid === null) {
                 hierarchy.push(assets[key]);
             } else {
+                if(assets[pid] === undefined) {
+                    return Boom.badData('Given parent_id doesn\'t exist in the list of assets');
+                }
                 assets[assets[key].parent_id].children.push(assets[key]);
             }
         }
@@ -255,8 +278,9 @@ class HapiServer extends Hapi.Server {
      * This function checks the validity of the object and returns formatted object array.
      * If validation fails, it throws HTTP error 422.
      *
+     * @method
      * @param jsonObject - object that needs to be formatted
-     * @returns {Object[]} - formatted object
+     * @returns {Object[]} formatted object
      */
     formatJson = (jsonObject) => {
         const result = this.isValidJson(jsonObject);
