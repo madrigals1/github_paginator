@@ -35,7 +35,10 @@ class HapiServer extends Hapi.Server {
      * 'name' and 'address' of the server
      */
     init = async () => {
-        await this.register([require('@hapi/vision')]);
+        await this.register([
+            require('@hapi/vision'),
+            require('@hapi/inert'),
+        ]);
 
         this.views({
             engines: {
@@ -58,6 +61,18 @@ class HapiServer extends Hapi.Server {
      * these can be used in unit tests.
      */
     addRoutes = () => {
+        // Serving static files
+        this.route({
+            method: 'GET',
+            path: '/public/{file*}',
+            handler: {
+                directory: {
+                    path: 'src/views/public/',
+                    listing: true
+                }
+            }
+        });
+
         const paginationParams = async (h) => {
             const currentPage = await pagination.getCurrentPage();
             const {params} = pagination;

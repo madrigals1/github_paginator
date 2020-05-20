@@ -1,0 +1,39 @@
+div.centered {
+    margin: 0 auto;
+    width: 960px;
+}
+
+div.pagination {
+    display: flex;
+    justify-content: center;
+}
+
+.pagination ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+.pagination ul li {
+    float: left;
+    width: 50px;
+    height: 50px;
+    margin: 5px;
+    border: 1px solid blue;
+    border-radius: 5px;
+    font-size: 25px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.pagination ul li a {
+    display: block;
+    text-align: center;
+    padding: 16px;
+    text-decoration: none;
+}
+
+.pagination ul li a:hover {
+    text-decoration: none;
+}
