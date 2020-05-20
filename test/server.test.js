@@ -62,14 +62,6 @@ describe('Server: Testing server routes -> ', () => {
         expect(route.statusCode).to.equal(404);
     });
 
-    it('/test route should throw 200', async () => {
-        const route = await server.inject({
-            method: 'get',
-            url: '/test'
-        });
-        expect(route.statusCode).to.equal(200);
-    });
-
     it('/json route without payload should throw 400', async () => {
         const route = await server.inject({
             method: 'post',
