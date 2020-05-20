@@ -1,6 +1,4 @@
-'use strict';
-
-const {validateAsset} = require('./schema');
+const { validateAsset } = require('./schema');
 
 /**
  * <b>Asset</b> - represents the entity, loaded from <b>JSON</b>.
@@ -14,16 +12,15 @@ const {validateAsset} = require('./schema');
  * @param {string} params.title - name of the Asset.
  * @param {number} params.level - hierarchical level of the Asset
  * @param {number[]} params.children - children of the Asset, by default should be empty
- * @param {number} params.parent_id - id of the parent Asset, can be null to represent top level Asset.
+ * @param {number} params.parent_id - id of the parent Asset, can be null to represent
+ * top level Asset.
  */
 class Asset {
-    constructor(params) {
-        const {error, value: validParams} = validateAsset(params);
-        if (error)
-            this.error = error;
-        else
-            Object.assign(this, validParams);
-    }
+  constructor(params) {
+    const { error, value: validParams } = validateAsset(params);
+    if (error) this.error = error;
+    else Object.assign(this, validParams);
+  }
 }
 
-module.exports = {Asset};
+module.exports = { Asset };

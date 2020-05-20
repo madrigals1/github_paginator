@@ -1,9 +1,11 @@
-'use strict';
-
 const Hapi = require('@hapi/hapi');
 const Boom = require('boom');
-const {Asset} = require('../asset/model');
-const {validateHapiServer} = require('./schema');
+const inert = require('@hapi/inert');
+const vision = require('@hapi/vision');
+const handlebars = require('handlebars');
+
+const { Asset } = require('../asset/model');
+const { validateHapiServer } = require('./schema');
 const pagination = require('../pagination/model');
 
 /**
@@ -22,18 +24,18 @@ const pagination = require('../pagination/model');
  * @param {boolean} params.canShowlogs - if on, server will show logs
  */
 class HapiServer extends Hapi.Server {
-    constructor(params) {
-        const {error, value: validParams} = validateHapiServer(params);
-        if (error) throw error;
+  constructor(params) {
+    const { error, value: validParams } = validateHapiServer(params);
+    if (error) throw error;
 
-        super({
-            port: validParams.port,
-            host: validParams.host
-        });
+    super({
+      port: validParams.port,
+      host: validParams.host,
+    });
 
-        this.canShowLogs = validParams.canShowLogs;
-        this.name = validParams.name;
-    }
+    this.canShowLogs = validParams.canShowLogs;
+    this.name = validParams.name;
+  }
 
     /**
      * This method:<br>
@@ -45,22 +47,19 @@ class HapiServer extends Hapi.Server {
      * @method
      */
     init = async () => {
-        await this.register([
-            require('@hapi/vision'),
-            require('@hapi/inert'),
-        ]);
+      await this.register([vision, inert]);
 
-        this.views({
-            engines: {
-                html: require('handlebars')
-            },
-            path: [__dirname + '../../../views', __dirname + '../../../../docs'],
-        });
+      this.views({
+        engines: {
+          html: handlebars,
+        },
+        path: [`${__dirname}../../../views`, `${__dirname}../../../../docs`],
+      });
 
-        this.addRoutes();
-        await this.start().then(() => {
-            if (this.canShowLogs) console.log(`Server "${this.name}" running on ${this.info.uri}`);
-        });
+      this.addRoutes();
+      await this.start().then(() => {
+        if (this.canShowLogs) console.log(`Server "${this.name}" running on ${this.info.uri}`);
+      });
     };
 
     /**
@@ -75,28 +74,28 @@ class HapiServer extends Hapi.Server {
      * @returns {void} action that displays provided data into <b>HTML</b> file
      */
     paginate = async (h) => {
-        const currentPage = await pagination.getCurrentPage();
-        const {page} = pagination.params;
+      const currentPage = await pagination.getCurrentPage();
+      const { page } = pagination.params;
 
-        const paginator = [];
-        for(let i = 1; i < 11; i++){
-            if(i === page) {
-                paginator.push({
-                    page:i,
-                    active: true
-                });
-            } else {
-                paginator.push({
-                    page:i,
-                    active: false
-                });
-            }
+      const paginator = [];
+      for (let i = 1; i < 11; i++) {
+        if (i === page) {
+          paginator.push({
+            page: i,
+            active: true,
+          });
+        } else {
+          paginator.push({
+            page: i,
+            active: false,
+          });
         }
+      }
 
-        return h.view('main', {
-            page: currentPage,
-            paginator,
-        });
+      return h.view('main', {
+        page: currentPage,
+        paginator,
+      });
     };
 
     /**
@@ -107,74 +106,68 @@ class HapiServer extends Hapi.Server {
      * @method
      */
     addRoutes = () => {
-        this.route({
-            method: 'get',
-            path: '/docs',
-            handler: (request, h) => {
-                return h.redirect('/docs/index.html');
-            }
-        });
+      this.route({
+        method: 'get',
+        path: '/docs',
+        handler: (request, h) => h.redirect('/docs/index.html'),
+      });
 
-        /**
+      /**
          * Route for serving doc files
          */
-        this.route({
-            method: 'GET',
-            path: '/docs/{file*}',
-            handler: {
-                directory: {
-                    path: 'docs/',
-                    listing: true
-                }
-            }
-        });
+      this.route({
+        method: 'GET',
+        path: '/docs/{file*}',
+        handler: {
+          directory: {
+            path: 'docs/',
+            listing: true,
+          },
+        },
+      });
 
-        /**
+      /**
          * Route for serving static files
          */
-        this.route({
-            method: 'GET',
-            path: '/public/{file*}',
-            handler: {
-                directory: {
-                    path: 'src/views/public/',
-                    listing: true
-                }
-            }
-        });
+      this.route({
+        method: 'GET',
+        path: '/public/{file*}',
+        handler: {
+          directory: {
+            path: 'src/views/public/',
+            listing: true,
+          },
+        },
+      });
 
-        /**
+      /**
          * Main route for pagination
          */
-        this.route({
-            method: 'get',
-            path: '/main',
-            handler: (request, h) => {
-                let page = parseInt(request.query.page);
-                if (!page) page = 1;
+      this.route({
+        method: 'get',
+        path: '/main',
+        handler: (request, h) => {
+          let page = parseInt(request.query.page, 10);
+          if (!page) page = 1;
 
-                pagination.setPage(page);
-                return this.paginate(h);
-            }
-        });
+          pagination.setPage(page);
+          return this.paginate(h);
+        },
+      });
 
-        this.route({
-            method: 'get',
-            path: '/next',
-            handler: (request, h) => {
-                return h.redirect(`/main?page=${pagination.getNextPage()}`);
-            }
-        });
+      this.route({
+        method: 'get',
+        path: '/next',
+        handler: (request, h) => h.redirect(`/main?page=${pagination.getNextPage()}`),
+      });
 
-        this.route({
-            method: 'get',
-            path: '/prev',
-            handler: (request, h) => {
-                return h.redirect(`/main?page=${pagination.getPreviousPage()}`);
-            }
-        });
+      this.route({
+        method: 'get',
+        path: '/prev',
+        handler: (request, h) => h.redirect(`/main?page=${pagination.getPreviousPage()}`),
+      });
 
-        /**
+      /**
          * This route returns the modified JSON file by the format provided in
          * https://github.com/pomelofashion/challenges/tree/master/challenge-nodejs
          *
@@ -195,19 +188,19 @@ class HapiServer extends Hapi.Server {
          * @param {callback} handler - callback that handles given request and returns
          * formatted JSON or Error.
          */
-        this.route({
-            options: {
-                payload: {
-                    allow: 'application/json'
-                }
-            },
-            method: 'post',
-            path: '/json',
-            handler: (request) => {
-                if (!request.payload) return Boom.badRequest('Please, provide JSON file in your request');
-                return this.formatJson(request.payload);
-            }
-        });
+      this.route({
+        options: {
+          payload: {
+            allow: 'application/json',
+          },
+        },
+        method: 'post',
+        path: '/json',
+        handler: (request) => {
+          if (!request.payload) return Boom.badRequest('Please, provide JSON file in your request');
+          return this.formatJson(request.payload);
+        },
+      });
     };
 
     /**
@@ -224,37 +217,42 @@ class HapiServer extends Hapi.Server {
      * 4) If <b>no errors</b>, we return <b>AssetList</b><br>
      *
      * @method
-     * @param {object} jsonObject - JSON object with id as <b>key</b> and object as <b>value</b>
-     * @returns {array} array of JSON objects
+     * @param {object} jsonObject - JSON object with level of objects as <b>key</b> and array of
+     * Assets as <b>value</b>.
+     * @returns {object} validated object of JSON objects with id as <b>key</b> and Asset
+     * as <b>value</b>
      */
     isValidJson = (jsonObject) => {
-        const assetList = {};
+      const assetListObject = {};
 
-        for (let key of Object.keys(jsonObject)) {
-            // Checking index STEP 1
-            const index = parseInt(key, 10);
-            if (isNaN(index)) return {'error': 'Incorrect JSON format. Top level indexes aren\'t number'};
+      for (let i = 0; i < Object.keys(jsonObject).length; i++) {
+        const key = Object.keys(jsonObject)[i];
 
-            // Checking array STEP 2
-            const objectArray = jsonObject[key];
-            if (!Array.isArray(objectArray)) return {'error': 'Incorrect JSON format. Not array on each level'};
+        // Checking index STEP 1
+        const index = parseInt(key, 10);
+        if (Number.isNaN(index)) return { error: 'Incorrect JSON format. Top level indexes aren\'t number' };
 
-            // Checking each object STEP 3
-            for (let object of objectArray) {
-                const asset = new Asset(object);
-                if (asset.error) return {'error': `Incorrect JSON format. ${asset.error}`};
-                assetList[asset.id] = asset;
-            }
+        // Checking array STEP 2
+        const objectArray = jsonObject[key];
+        if (!Array.isArray(objectArray)) return { error: 'Incorrect JSON format. Not array on each level' };
+
+        // Checking each object STEP 3
+        for (let j = 0; j < objectArray.length; j++) {
+          const asset = new Asset(objectArray[j]);
+          if (asset.error) return { error: `Incorrect JSON format. ${asset.error}` };
+          assetListObject[asset.id] = asset;
         }
+      }
 
-        // STEP 4
-        return assetList;
+      // STEP 4
+      return assetListObject;
     };
 
     /**
      * This function iterates through every object by key (ID):<br>
      * - If the object in the iteration has <b>no parent id</b>, adds it to hierarchy array.<br>
-     * - If the object in the iteration has <b>parent id</b>, adds it to children array of parent.<br>
+     * - If the object in the iteration has <b>parent id</b>, adds it to children array
+     * of parent.<br>
      * <br>
      * Returns the objects in the correct hierarchy, top objects on top, children objects
      * inside children array of top objects. <br>
@@ -275,19 +273,20 @@ class HapiServer extends Hapi.Server {
      * return hierarchy
      */
     getAssetsHierarchy = (assets) => {
-        const hierarchy = [];
-        for (let key of Object.keys(assets)) {
-            const pid = assets[key].parent_id;
-            if (pid === null) {
-                hierarchy.push(assets[key]);
-            } else {
-                if(assets[pid] === undefined) {
-                    return Boom.badData('Given parent_id doesn\'t exist in the list of assets');
-                }
-                assets[assets[key].parent_id].children.push(assets[key]);
-            }
+      const hierarchy = [];
+      Object.keys(assets).forEach((key) => {
+        const pid = assets[key].parent_id;
+        if (pid === null) {
+          hierarchy.push(assets[key]);
+        } else {
+          if (assets[pid] === undefined) {
+            return Boom.badData('Given parent_id doesn\'t exist in the list of assets');
+          }
+          assets[assets[key].parent_id].children.push(assets[key]);
         }
-        return hierarchy;
+        return null;
+      });
+      return hierarchy;
     };
 
     /**
@@ -299,11 +298,11 @@ class HapiServer extends Hapi.Server {
      * @returns {Object[]} formatted object
      */
     formatJson = (jsonObject) => {
-        const result = this.isValidJson(jsonObject);
-        if (result.error) return Boom.badData(result.error);
+      const result = this.isValidJson(jsonObject);
+      if (result.error) return Boom.badData(result.error);
 
-        return this.getAssetsHierarchy(result);
+      return this.getAssetsHierarchy(result);
     };
 }
 
-module.exports = {HapiServer};
+module.exports = { HapiServer };
