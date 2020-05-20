@@ -1,6 +1,6 @@
 {
   "name": "pomelo_challenge",
-  "version": "1.6.2",
+  "version": "1.6.3",
   "description": "Challenge task for Pomelo",
   "main": "src/index.js",
   "scripts": {
@@ -8,7 +8,7 @@
     "test": "npm run test:server && npm run test:json",
     "test:server": "lab -v ./test/server.test.js",
     "test:json": "lab -v ./test/json.test.js",
-    "doc": "jsdoc -c docs/conf/config.json",
+    "doc": "jsdoc -c jsdoc.json",
     "postinstall": "npm run doc"
   },
   "author": "Adi Sabyrbayev",
@@ -21,11 +21,11 @@
     "axios": "^0.19.2",
     "boom": "^7.3.0",
     "dotenv": "^8.2.0",
-    "handlebars": "^4.7.6",
-    "jsdoc": "^3.6.4"
+    "handlebars": "^4.7.6"
   },
   "devDependencies": {
     "@hapi/code": "^8.0.1",
-    "@hapi/lab": "^22.0.4"
+    "@hapi/lab": "^22.0.4",
+    "jsdoc": "^3.6.4"
   }
 }
