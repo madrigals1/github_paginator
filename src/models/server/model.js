@@ -19,13 +19,13 @@ const pagination = require('../pagination/model');
  */
 class HapiServer extends Hapi.Server {
   /**
-   * @param {object} params - Object with list the of params, provided in server/schema.js
-   * @param {string} params.name - Server name, only used to display in logs
-   * @param {number} params.port - Server port, used to run server on specific port.
-   * Should set unused port in your Device
-   * @param {string} params.host - Server domain, can use localhost for your local PC
-   * @param {boolean} params.canShowlogs - if on, server will show logs
-   */
+     * @param {object} params - Object with list the of params, provided in server/schema.js
+     * @param {string} params.name - Server name, only used to display in logs
+     * @param {number} params.port - Server port, used to run server on specific port.
+     * Should set unused port in your Device
+     * @param {string} params.host - Server domain, can use localhost for your local PC
+     * @param {boolean} params.canShowlogs - if on, server will show logs
+     */
   constructor(params) {
     const { error, value: validParams } = validateHapiServer(params);
     if (error) throw error;
@@ -35,12 +35,12 @@ class HapiServer extends Hapi.Server {
       host: validParams.host,
     });
     /**
-     * @property {boolean} canShowLogs -  if on, server will show logs
-     */
+         * @property {boolean} canShowLogs -  if on, server will show logs
+         */
     this.canShowLogs = validParams.canShowLogs;
     /**
-     * @property {string} name - Server name, only used to display in logs
-     */
+         * @property {string} name - Server name, only used to display in logs
+         */
     this.name = validParams.name;
   }
 
@@ -116,6 +116,9 @@ class HapiServer extends Hapi.Server {
      * @method
      */
     addRoutes = () => {
+      /**
+       * Route that redirects to documentation
+       */
       this.route({
         method: 'get',
         path: '/docs',
@@ -123,8 +126,8 @@ class HapiServer extends Hapi.Server {
       });
 
       /**
-         * Route for serving doc files
-         */
+       * Route for serving doc files
+       */
       this.route({
         method: 'GET',
         path: '/docs/{file*}',
@@ -137,8 +140,8 @@ class HapiServer extends Hapi.Server {
       });
 
       /**
-         * Route for serving static files
-         */
+       * Route for serving static files
+       */
       this.route({
         method: 'GET',
         path: '/public/{file*}',
@@ -151,8 +154,8 @@ class HapiServer extends Hapi.Server {
       });
 
       /**
-         * Main route for pagination
-         */
+       * Main route for pagination
+       */
       this.route({
         method: 'get',
         path: '/main',
@@ -165,12 +168,18 @@ class HapiServer extends Hapi.Server {
         },
       });
 
+      /**
+       * Route that redirects to next page
+       */
       this.route({
         method: 'get',
         path: '/next',
         handler: (request, h) => h.redirect(`/main?page=${pagination.getNextPage()}`),
       });
 
+      /**
+       * Route that redirects to previous page
+       */
       this.route({
         method: 'get',
         path: '/prev',
@@ -178,26 +187,19 @@ class HapiServer extends Hapi.Server {
       });
 
       /**
-         * This route returns the modified JSON file by the format provided in
-         * https://github.com/pomelofashion/challenges/tree/master/challenge-nodejs
-         *
-         * Cases:
-         * - Only accepts application/json, if object Content-Type is incorrect, returns
-         * error 415 (Unsupported Media Type). This means that if you send TXT, 415 will
-         * be thrown.
-         * - If no JSON is received, returns error 400 (Bad Request)
-         * - If received JSON is invalid syntactically, returns error 400 (Bad Request)
-         * - If received JSON is invalid by format, which doesn't fit Appendix 1,
-         * returns error 422 (Unprocessable Entity)
-         * - If everything OK, returns valid formatted JSON.
-         *
-         * @param {string} options.payload.allow - string with ContentType, that is allowed to be
-         * processed by this route.
-         * @param {string} method
-         * @param {string} path - Endpoint
-         * @param {callback} handler - callback that handles given request and returns
-         * formatted JSON or Error.
-         */
+       * This route returns the modified JSON file by the format provided in
+       * https://github.com/pomelofashion/challenges/tree/master/challenge-nodejs
+       *
+       * Cases:
+       * - Only accepts application/json, if object Content-Type is incorrect, returns
+       * error 415 (Unsupported Media Type). This means that if you send TXT, 415 will
+       * be thrown.
+       * - If no JSON is received, returns error 400 (Bad Request)
+       * - If received JSON is invalid syntactically, returns error 400 (Bad Request)
+       * - If received JSON is invalid by format, which doesn't fit Appendix 1,
+       * returns error 422 (Unprocessable Entity)
+       * - If everything OK, returns valid formatted JSON.
+       */
       this.route({
         options: {
           payload: {
