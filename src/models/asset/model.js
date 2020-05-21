@@ -1,4 +1,4 @@
-const { validateAsset } = require('./schema');
+const AssetSchema = require('./schema');
 
 /**
  * <b>Asset</b> - represents the entity, loaded from <b>JSON</b>.
@@ -18,10 +18,19 @@ class Asset {
    * top level Asset.
    */
   constructor(params) {
-    const { error, value: validParams } = validateAsset(params);
+    const { error, value: validParams } = this.validate(params);
     if (error) this.error = error;
     else Object.assign(this, validParams);
   }
+
+  /**
+   * Validation of given object using AssetSchema
+   *
+   * @method
+   * @param {object} params - object that needs to be validated
+   * @returns {object} validated object or object with error
+   */
+  validate = (params) => AssetSchema.validate(params);
 }
 
 module.exports = { Asset };

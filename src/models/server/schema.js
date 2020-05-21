@@ -26,13 +26,4 @@ const HapiServerSchema = Joi.object({
     .default(true),
 });
 
-/**
- * @desc Validation of given object using HapiServerSchema
- *
- * @method
- * @param {object} params - object that needs to be validated
- * @returns {object} validated object or object with error
- */
-const validateHapiServer = (params) => HapiServerSchema.validate(params);
-
-module.exports = { validateHapiServer };
+module.exports = HapiServerSchema;

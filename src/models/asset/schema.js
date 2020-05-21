@@ -29,13 +29,4 @@ const AssetSchema = Joi.object({
     .required(),
 });
 
-/**
- * Validation of given object using AssetSchema
- *
- * @method
- * @param {object} params - object that needs to be validated
- * @returns {object} validated object or object with error
- */
-const validateAsset = (params) => AssetSchema.validate(params);
-
-module.exports = { validateAsset };
+module.exports = AssetSchema;
