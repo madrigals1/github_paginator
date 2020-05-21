@@ -105,6 +105,15 @@ class HapiServer extends Hapi.Server {
    * This method adds <b>routes</b> (endpoints) to the server. Every route will return:<br>
    * - HTTP error <b>404</b> if route doesn't exist.<br>
    * - HTTP errors <b>400</b>, <b>415</b>, <b>422</b> if provided data is not valid.<br>
+   * <br>
+   * List of all routes:<br>
+   * - <b>/docs</b> - redirects to <b>/docs/index.html</b><br>
+   * - <b>/docs/{file*}</b> - route for serving documentation files<br>
+   * - <b>/public/{file*}</b> - route for serving static files for pagination<br>
+   * - <b>/main</b> - route for {@link Pagination}<br>
+   * - <b>/next</b> - route that gets <b>next page</b> and redirects to <b>/main</b><br>
+   * - <b>/prev</b> - route that gets <b>previous page</b> and redirects to <b>/main</b><br>
+   * - <b>/json</b> - route for <b>JSON</b> formatting<br>
    *
    * @method
    */
@@ -271,6 +280,7 @@ class HapiServer extends Hapi.Server {
    * @param {object} assets - object with all the objects of JSON in 'key-value' format
    * @returns {object[]} Array of objects in the correct hierarchy
    * @example
+   * PSEUDOCODE:
    * hierarchy = []
    * foreach object of objectArray:
    *     if object has parent_id:
