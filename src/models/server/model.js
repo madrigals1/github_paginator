@@ -14,16 +14,18 @@ const pagination = require('../pagination/model');
  * Invalid data will throw <b>Node</b> error.<br>
  * <br>
  * <b>'port'</b> and <b>'host'</b> params will be sent to superclass Hapi.Server
- *
- * @constructor
- * @param {object} params - Object with list the of params, provided in server/schema.js
- * @param {string} params.name - Server name, only used to display in logs
- * @param {number} params.port - Server port, used to run server on specific port.
- * Should set unused port in your Device
- * @param {string} params.host - Server domain, can use localhost for your local PC
- * @param {boolean} params.canShowlogs - if on, server will show logs
+ * @class
+ * @extends Hapi.Server
  */
 class HapiServer extends Hapi.Server {
+  /**
+   * @param {object} params - Object with list the of params, provided in server/schema.js
+   * @param {string} params.name - Server name, only used to display in logs
+   * @param {number} params.port - Server port, used to run server on specific port.
+   * Should set unused port in your Device
+   * @param {string} params.host - Server domain, can use localhost for your local PC
+   * @param {boolean} params.canShowlogs - if on, server will show logs
+   */
   constructor(params) {
     const { error, value: validParams } = validateHapiServer(params);
     if (error) throw error;
@@ -32,8 +34,13 @@ class HapiServer extends Hapi.Server {
       port: validParams.port,
       host: validParams.host,
     });
-
+    /**
+     * @property {boolean} canShowLogs -  if on, server will show logs
+     */
     this.canShowLogs = validParams.canShowLogs;
+    /**
+     * @property {string} name - Server name, only used to display in logs
+     */
     this.name = validParams.name;
   }
 

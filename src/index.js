@@ -1,3 +1,13 @@
+/**
+ * @file index.js is the root file for this app
+ * @author Adi Sabyrbayev
+ */
+
+/**
+ * Server Creator module
+ * @module Server Creator
+ */
+
 const { HapiServer } = require('./models/server/model');
 
 /**

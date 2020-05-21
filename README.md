@@ -1,4 +1,4 @@
-# JSON Formatter
+# Pomelo Challenge
 
 Formatter for JSON using Hapi Server. Includes test cases.
 

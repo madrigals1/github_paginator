@@ -31,7 +31,7 @@ const HapiServerSchema = Joi.object({
  *
  * @method
  * @param {object} params - object that needs to be validated
- * @returns {object} validated object
+ * @returns {object} validated object or object with error
  */
 const validateHapiServer = (params) => HapiServerSchema.validate(params);
 
