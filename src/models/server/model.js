@@ -7,6 +7,7 @@ const handlebars = require('handlebars');
 const { Asset } = require('../asset/model');
 const HapiServerSchema = require('./schema');
 const pagination = require('../pagination/model');
+const { QUERY } = require('../../utils/constants');
 
 /**
  * <b>HapiServer</b> - extends Hapi.Server, adds new params <b>'canShowLogs'</b> and <b>'name'</b>.
@@ -97,6 +98,7 @@ class HapiServer extends Hapi.Server {
     return h.view('docs', {
       page: currentPageModel,
       paginator,
+      query: QUERY,
     });
   };
 

@@ -6,7 +6,12 @@
 const dotenv = require('dotenv');
 
 dotenv.config();
-const { GITHUB_TOKEN } = process.env;
+const {
+  GITHUB_TOKEN,
+  PAGE,
+  PER_PAGE,
+  QUERY,
+} = process.env;
 
 module.exports = {
   /**
@@ -14,4 +19,19 @@ module.exports = {
    * @type {string}
    */
   GITHUB_TOKEN,
+  /**
+   * Current page of Pagination
+   * @type {number}
+   */
+  PAGE,
+  /**
+   * Amounts of repositories per page
+   * @type {number}
+   */
+  PER_PAGE,
+  /**
+   * Query for searching in Github Search API
+   * @type {string}
+   */
+  QUERY,
 };

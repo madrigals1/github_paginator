@@ -1,5 +1,10 @@
 const axios = require('axios');
-const { GITHUB_TOKEN } = require('../../utils/constants');
+const {
+  GITHUB_TOKEN,
+  PAGE,
+  PER_PAGE,
+  QUERY,
+} = require('../../utils/constants');
 
 /**
  * <b>Pagination</b> - class used for loading pages from Github using Github API,
@@ -15,9 +20,9 @@ class Pagination {
      * @property {string} q=nodejs - query string.
      */
     this.params = {
-      page: 1,
-      per_page: 10,
-      q: 'nodejs',
+      page: PAGE,
+      per_page: PER_PAGE,
+      q: QUERY,
     };
     /**
      * Headers used to load data from request
