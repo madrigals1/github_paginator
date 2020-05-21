@@ -83,26 +83,18 @@ class HapiServer extends Hapi.Server {
      * @returns {void} action that displays provided data into <b>HTML</b> file
      */
     paginate = async (h) => {
-      const currentPage = await pagination.getCurrentPage();
-      const { page } = pagination.params;
+      const currentPageModel = await pagination.getCurrentPage();
+      const { page: currentPageNumber } = pagination.params;
 
       const paginator = [];
       for (let i = 1; i < 11; i++) {
-        if (i === page) {
-          paginator.push({
-            page: i,
-            active: true,
-          });
-        } else {
-          paginator.push({
-            page: i,
-            active: false,
-          });
-        }
+        paginator.push(i === currentPageNumber
+          ? { page: i, active: true }
+          : { page: i, active: false });
       }
 
       return h.view('main', {
-        page: currentPage,
+        page: currentPageModel,
         paginator,
       });
     };
