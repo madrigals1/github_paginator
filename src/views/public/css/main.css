@@ -1,9 +1,25 @@
+.title {
+    text-align: center;
+}
+
+.mytable {
+    margin-top: 20px;
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.mytable td, th{
+    border: 1px solid #333333;
+    padding: 8px;
+}
+
 div.centered {
     margin: 0 auto;
     width: 960px;
 }
 
 div.pagination {
+    margin-top: 20px;
     display: flex;
     justify-content: center;
 }

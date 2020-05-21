@@ -7,6 +7,23 @@
 </head>
 <body>
 <div class="centered">
+    <h3 class="title">List of Github repositories by query <b>"nodejs"</b></h3>
+    <table class="mytable">
+        <tr>
+            <th>ID</th>
+            <th>Repository</th>
+            <th>Owner</th>
+            <th>Link</th>
+        </tr>
+        {{#each page}}
+        <tr>
+            <td>{{this.id}}</td>
+            <td>{{this.name}}</td>
+            <td>{{this.owner.login}}</td>
+            <td><a href="{{this.html_url}}">{{this.html_url}}</a></td>
+        </tr>
+        {{/each}}
+    </table>
     <div class="pagination">
         <ul class="pagination">
             <a href="/prev">
@@ -18,9 +35,9 @@
 
             <a href="/main?page={{this.page}}">
                 {{#if this.active}}
-                    <li style="background: lightgray">{{this.page}}</li>
+                <li style="background: lightgray">{{this.page}}</li>
                 {{else}}
-                    <li>{{this.page}}</li>
+                <li>{{this.page}}</li>
                 {{/if}}
             </a>
 
@@ -32,9 +49,6 @@
 
         </ul>
     </div>
-        {{#each page}}
-        <li>{{this.id}}</li>
-        {{/each}}
 </div>
 </body>
 </html>
