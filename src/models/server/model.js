@@ -77,7 +77,7 @@ class HapiServer extends Hapi.Server {
    * - Current page data from <b>Pagination</b> object<br>
    * - Creates <b>paginator</b> with active and inactive pages for <b>handlebars</b><br>
    * <br>
-   * Sends values to main.html
+   * Sends values to docs.html
    *
    * @method
    * @param {object} h - reply object
@@ -94,7 +94,7 @@ class HapiServer extends Hapi.Server {
         : { page: i, active: false });
     }
 
-    return h.view('main', {
+    return h.view('docs', {
       page: currentPageModel,
       paginator,
     });
@@ -108,6 +108,7 @@ class HapiServer extends Hapi.Server {
    * <br>
    * List of all routes:<br>
    * - <b>/docs</b> - redirects to <b>/docs/index.html</b><br>
+   * - <b>/</b> - redirects to <b>/docs/index.html</b><br>
    * - <b>/docs/{file*}</b> - route for serving documentation files<br>
    * - <b>/public/{file*}</b> - route for serving static files for pagination<br>
    * - <b>/main</b> - route for {@link Pagination}<br>
@@ -119,11 +120,20 @@ class HapiServer extends Hapi.Server {
    */
   addRoutes = () => {
     /**
-     * Route that redirects to documentation
+     * Route /docs redirect to documentation
      */
     this.route({
       method: 'get',
       path: '/docs',
+      handler: (request, h) => h.redirect('/docs/index.html'),
+    });
+
+    /**
+     * Empty route redirect to documentation
+     */
+    this.route({
+      method: 'get',
+      path: '/',
       handler: (request, h) => h.redirect('/docs/index.html'),
     });
 
