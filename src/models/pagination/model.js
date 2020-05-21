@@ -26,10 +26,12 @@ class Pagination {
      * + {@link module:Constants.GITHUB_TOKEN}
      * @property {string} Content-Type=application/json - header with content type.
      */
-    this.headers = {
-      Authorization: `Bearer ${GITHUB_TOKEN}`,
-      'Content-Type': 'application/json',
-    };
+    if (GITHUB_TOKEN) {
+      this.headers = {
+        Authorization: `Bearer ${GITHUB_TOKEN}`,
+        'Content-Type': 'application/json',
+      };
+    }
     /**
      * Default method for pagination
      * @constant
