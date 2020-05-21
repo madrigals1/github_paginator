@@ -19,6 +19,7 @@ describe('Server: Testing server details ->', () => {
       name: 'Details Testing',
       port: 3001,
       canShowLogs: false,
+      host: 'localhost',
     });
     await server.init();
   });
@@ -44,16 +45,17 @@ describe('Server: Testing server routes -> ', () => {
       name: 'Routes Testing',
       port: 3002,
       canShowLogs: false,
+      host: 'localhost',
     });
     await server.init();
   });
 
-  it('Default route should throw 404', async () => {
+  it('Default route should throw 302', async () => {
     const route = await server.inject({
       method: 'get',
       url: '/',
     });
-    expect(route.statusCode).to.equal(404);
+    expect(route.statusCode).to.equal(302);
   });
 
   it('Random route should throw 404', async () => {

@@ -20,6 +20,7 @@ describe('JSON: Testing INCORRECT input ->', () => {
       name: 'JSON Testing',
       port: 3001,
       canShowLogs: false,
+      host: 'localhost',
     });
     await server.init();
   });
@@ -66,6 +67,7 @@ describe('JSON: Testing CORRECT input ->', () => {
       name: 'JSON Testing',
       port: 3003,
       canShowLogs: false,
+      host: 'localhost',
     });
     await server.init();
   });

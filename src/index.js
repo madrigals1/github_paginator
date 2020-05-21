@@ -17,6 +17,7 @@ const { HapiServer } = require('./models/server/model');
 const server = new HapiServer({
   name: 'Main',
   port: 3000,
+  host: 'localhost',
 });
 
 server.init();
