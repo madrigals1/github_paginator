@@ -73,8 +73,8 @@ describe('JSON: Testing CORRECT input ->', () => {
   });
 
   /**
-     * Testing all the test cases provided in testCases.js
-     */
+   * Testing all the test cases provided in testCases.js
+   */
   testCases.forEach((testCase) => {
     it(`JSON: Testing case "${testCase.name}"`, async () => {
       const route = await server.inject({
