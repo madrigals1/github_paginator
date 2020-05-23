@@ -42,13 +42,16 @@ To run unit test
 npm test
 ```
 
-To test server functionality or json formatting separately, run
+To test server functionality one by one, run
 ```
-npm test:server
-npm test:json
+npm run test:server
+npm run test:json
+npm run test:pagination
 ```
-respectively.
-
+To generate documentation, run
+```
+npm run doc
+```
 ## Usage
 
 #### Part 1 - JSON Formatter
