@@ -50,10 +50,24 @@ describe('Server: Testing server routes -> ', () => {
     await server.init();
   });
 
+  /**
+   * Default route redirects to /docs/index.html
+   */
   it('Default route should throw 302', async () => {
     const route = await server.inject({
       method: 'get',
       url: '/',
+    });
+    expect(route.statusCode).to.equal(302);
+  });
+
+  /**
+   * /docs route redirects to /docs/index.html
+   */
+  it('/docs should throw 302', async () => {
+    const route = await server.inject({
+      method: 'get',
+      url: '/docs',
     });
     expect(route.statusCode).to.equal(302);
   });
