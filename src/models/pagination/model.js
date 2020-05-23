@@ -104,4 +104,4 @@ class Pagination {
   }
 }
 
-module.exports = new Pagination();
+module.exports = Pagination;

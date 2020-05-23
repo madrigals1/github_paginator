@@ -6,7 +6,7 @@ const handlebars = require('handlebars');
 
 const { Asset } = require('../asset/model');
 const HapiServerSchema = require('./schema');
-const pagination = require('../pagination/model');
+const Pagination = require('../pagination/model');
 const { QUERY } = require('../../utils/constants');
 
 /**
@@ -44,6 +44,10 @@ class HapiServer extends Hapi.Server {
      * @property {string} name - Server name, only used to display in logs
      */
     this.name = validParams.name;
+    /**
+     * @property {Pagination} pagination - Pagination for current server
+     */
+    this.pagination = new Pagination();
   }
 
   /**
@@ -85,8 +89,8 @@ class HapiServer extends Hapi.Server {
    * @returns {void} action that displays provided data into <b>HTML</b> file
    */
   paginate = async (h) => {
-    const currentPageModel = await pagination.getCurrentPage();
-    const { page: currentPageNumber } = pagination.params;
+    const currentPageModel = await this.pagination.getCurrentPage();
+    const { page: currentPageNumber } = this.pagination.params;
 
     const paginator = [];
     for (let i = 1; i < 11; i++) {
@@ -177,7 +181,7 @@ class HapiServer extends Hapi.Server {
         let page = parseInt(request.query.page, 10);
         if (!page) page = 1;
 
-        pagination.setPage(page);
+        this.pagination.setPage(page);
         return this.paginate(h);
       },
     });
@@ -188,7 +192,7 @@ class HapiServer extends Hapi.Server {
     this.route({
       method: 'get',
       path: '/next',
-      handler: (request, h) => h.redirect(`/main?page=${pagination.getNextPage()}`),
+      handler: (request, h) => h.redirect(`/main?page=${this.pagination.getNextPage()}`),
     });
 
     /**
@@ -197,7 +201,7 @@ class HapiServer extends Hapi.Server {
     this.route({
       method: 'get',
       path: '/prev',
-      handler: (request, h) => h.redirect(`/main?page=${pagination.getPreviousPage()}`),
+      handler: (request, h) => h.redirect(`/main?page=${this.pagination.getPreviousPage()}`),
     });
 
     /**
