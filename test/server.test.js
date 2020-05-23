@@ -53,7 +53,7 @@ describe('Server: Testing server routes -> ', () => {
   /**
    * Default route redirects to /docs/index.html
    */
-  it('Default route should throw 302', async () => {
+  it('Default route should return 302', async () => {
     const route = await server.inject({
       method: 'get',
       url: '/',
@@ -64,7 +64,7 @@ describe('Server: Testing server routes -> ', () => {
   /**
    * /docs route redirects to /docs/index.html
    */
-  it('/docs should throw 302', async () => {
+  it('/docs should return 302', async () => {
     const route = await server.inject({
       method: 'get',
       url: '/docs',
@@ -72,7 +72,7 @@ describe('Server: Testing server routes -> ', () => {
     expect(route.statusCode).to.equal(302);
   });
 
-  it('Random route should throw 404', async () => {
+  it('Random route should return 404', async () => {
     const route = await server.inject({
       method: 'get',
       url: '/random',
@@ -80,7 +80,7 @@ describe('Server: Testing server routes -> ', () => {
     expect(route.statusCode).to.equal(404);
   });
 
-  it('/json route without payload should throw 400', async () => {
+  it('/json route without payload should return 400', async () => {
     const route = await server.inject({
       method: 'post',
       url: '/json',

@@ -25,7 +25,7 @@ describe('JSON: Testing INCORRECT input ->', () => {
     await server.init();
   });
 
-  it('Sending without data should throw 400', async () => {
+  it('Sending without data should return 400', async () => {
     const route = await server.inject({
       method: 'post',
       url: '/json',
@@ -33,7 +33,7 @@ describe('JSON: Testing INCORRECT input ->', () => {
     expect(route.statusCode).to.equal(400);
   });
 
-  it('Sending incorrect data (Not JSON) should throw 415', async () => {
+  it('Sending incorrect data (Not JSON) should return 415', async () => {
     const route = await server.inject({
       method: 'post',
       url: '/json',
@@ -43,7 +43,7 @@ describe('JSON: Testing INCORRECT input ->', () => {
     expect(route.statusCode).to.equal(415);
   });
 
-  it('Sending with incorrect JSON Formatting should throw 422', async () => {
+  it('Sending with incorrect JSON Formatting should return 422', async () => {
     const route = await server.inject({
       method: 'post',
       url: '/json',
