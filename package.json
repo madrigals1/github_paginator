@@ -1,13 +1,14 @@
 {
   "name": "pomelo_challenge",
-  "version": "1.9.0",
+  "version": "1.9.5",
   "description": "Challenge task for Pomelo",
   "main": "src/index.js",
   "scripts": {
     "start": "node src/index.js",
-    "test": "npm run test:server && npm run test:json",
+    "test": "npm run test:server && npm run test:json && npm run test:pagination",
     "test:server": "lab -v ./test/server.test.js",
     "test:json": "lab -v ./test/json.test.js",
+    "test:pagination": "lab -v ./test/pagination.test.js",
     "doc": "jsdoc -c jsdoc.json",
     "postinstall": "npm run doc"
   },
