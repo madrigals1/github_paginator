@@ -1,10 +1,8 @@
-# Pomelo Challenge
-
-This project is a [NodeJS challenge](https://github.com/pomelofashion/challenges/tree/master/challenge-nodejs) by Pomelo.
+# JSON Formatter and Github Paginator
 
 It consists of 2 parts:
-1) Formatter for JSON, see [Part 1](https://github.com/pomelofashion/challenges/tree/master/challenge-nodejs#part-1)
-2) Pagination using Github Search API, see [Part 2](https://github.com/pomelofashion/challenges/tree/master/challenge-nodejs#part-2)
+1) Formatter for **JSON**
+2) Pagination using **Github Search API**
 
 Project was made by using [HapiJS](https://hapi.dev/) framework. 
 
@@ -61,13 +59,92 @@ it, so that **children objects** are in the **children
 array** of **parent objects.**
 
 To format the JSON document, send request to http://localhost:3000/json 
-along with JSON document in [this format](https://github.com/pomelofashion/challenges/tree/master/challenge-nodejs#appendix-1-input). 
+along with JSON document in this format:
+
+```json
+{"0":
+  [{"id": 10,
+    "title": "House",
+    "level": 0,
+    "children": [],
+    "parent_id": null}],
+ "1":
+  [{"id": 12,
+    "title": "Red Roof",
+    "level": 1,
+    "children": [],
+    "parent_id": 10},
+   {"id": 18,
+    "title": "Blue Roof",
+    "level": 1,
+    "children": [],
+    "parent_id": 10},
+   {"id": 13,
+    "title": "Wall",
+    "level": 1,
+    "children": [],
+    "parent_id": 10}],
+ "2":
+  [{"id": 17,
+    "title": "Blue Window",
+    "level": 2,
+    "children": [],
+    "parent_id": 12},
+   {"id": 16,
+    "title": "Door",
+    "level": 2,
+    "children": [],
+    "parent_id": 13},
+   {"id": 15,
+    "title": "Red Window",
+    "level": 2,
+    "children": [],
+    "parent_id": 12}]}
+```
 
 Can use [Postman](https://www.postman.com/) for sending requests.
 
 Server will:
 - Throw **HTTP** errors **400, 415, 422** if the JSON document is not valid
-- Return **formatted JSON** in [this format](https://github.com/pomelofashion/challenges/tree/master/challenge-nodejs#appending-2-output).
+- Return **formatted JSON** in this format:
+
+```json
+[{"id": 10,
+  "title": "House",
+  "level": 0,
+  "children":
+   [{"id": 12,
+     "title": "Red Roof",
+     "level": 1,
+     "children":
+      [{"id": 17,
+        "title": "Blue Window",
+        "level": 2,
+        "children": [],
+        "parent_id": 12},
+       {"id": 15,
+        "title": "Red Window",
+        "level": 2,
+        "children": [],
+        "parent_id": 12}],
+     "parent_id": 10},
+    {"id": 18,
+     "title": "Blue Roof",
+     "level": 1,
+     "children": [],
+     "parent_id": 10},
+    {"id": 13,
+     "title": "Wall",
+     "level": 1,
+     "children":
+      [{"id": 16,
+        "title": "Door",
+        "level": 2,
+        "children": [],
+        "parent_id": 13}],
+     "parent_id": 10}],
+  "parent_id": null}]
+```
 
 #### Part 2 - Pagination with Github Search API
 
@@ -75,8 +152,6 @@ Server will:
 It can work without Github Token, but the amount of requests will be limited to **60 per hour**.
 Having Github Token, this amount will increase to **5000 requests per hour**, which will help
 while running lots of auto tests.
-
->P.S. I will provide my Github TOKEN inside **.env** file for this project.
 
 This feature sends request to https://api.github.com/search/repositories 
 with parameters:
@@ -87,12 +162,14 @@ with parameters:
 In our example, by default we will use:
 - **PAGE** = 1
 - **PER_PAGE** = 10
-- **QUERY** - nodejs
+- **QUERY** = word
 
-> These can be changed in **.env** file
-
+> These can be changed in **.env** file. Also, using simple **UI**, that is present on 
+> http://localhost:3000/main, we can change values of **PAGE** and **QUERY** dynamically.
 
 To see the results, check http://localhost:3000/main.
+
+![UI Example](Images/UI.png)
 
 #### Additional
 
