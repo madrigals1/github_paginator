@@ -48,6 +48,11 @@ class HapiServer extends Hapi.Server {
      * @property {Pagination} pagination - Pagination for current server
      */
     this.pagination = new Pagination();
+
+    /**
+     * @property {string} query - Query string
+     */
+    this.query = QUERY;
   }
 
   /**
@@ -81,6 +86,7 @@ class HapiServer extends Hapi.Server {
    * This method gets:<br>
    * - Current page data from <b>Pagination</b> object<br>
    * - Creates <b>paginator</b> with active and inactive pages for <b>handlebars</b><br>
+   * - Set query to the value, that is stored in <b>this.query</b>
    * <br>
    * Sends values to docs.html
    *
@@ -90,7 +96,7 @@ class HapiServer extends Hapi.Server {
    */
   paginate = async (h) => {
     const currentPageModel = await this.pagination.getCurrentPage();
-    const { page: currentPageNumber } = this.pagination.params;
+    const { page: currentPageNumber, q: query } = this.pagination.params;
 
     const paginator = [];
     for (let i = 1; i < 11; i++) {
@@ -102,7 +108,7 @@ class HapiServer extends Hapi.Server {
     return h.view('docs', {
       page: currentPageModel,
       paginator,
-      query: QUERY,
+      query,
     });
   };
 
@@ -179,8 +185,10 @@ class HapiServer extends Hapi.Server {
       path: '/main',
       handler: (request, h) => {
         let page = parseInt(request.query.page, 10);
-        if (!page) page = 1;
+        const query = request.query.search;
+        if (query || !page) page = 1;
 
+        this.pagination.setQuery(query);
         this.pagination.setPage(page);
         return this.paginate(h);
       },

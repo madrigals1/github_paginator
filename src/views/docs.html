@@ -7,6 +7,10 @@
 </head>
 <body>
 <div class="centered">
+    <form class="form" method="get" action="/main">
+        <input placeholder="Search..." class="form-elem" name="search" type="text"/>
+        <button class="form-elem" type="submit">GO!</button>
+    </form>
     <p class="title">List of Github repositories by query <b>{{query}}</b></p>
     <table class="mytable">
         <tr>

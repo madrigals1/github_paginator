@@ -86,6 +86,16 @@ class Pagination {
   }
 
   /**
+   * Setting search query to <b>X</b> value.
+   *
+   * @method
+   * @param {string} query - query name
+   */
+  setQuery = (query) => {
+    this.params.q = query || this.params.q;
+  };
+
+  /**
    * Gets next page index
    * @method
    * @returns {number} Index of next page
