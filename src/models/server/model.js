@@ -214,7 +214,7 @@ class HapiServer extends Hapi.Server {
 
     /**
      * This route returns the modified JSON file by the format provided in
-     * https://github.com/pomelofashion/challenges/tree/master/challenge-nodejs
+     * README.md
      *
      * Cases:
      * - Only accepts application/json, if object Content-Type is incorrect, returns
