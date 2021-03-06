@@ -169,7 +169,7 @@ In our example, by default we will use:
 
 To see the results, check http://localhost:3000/main.
 
-![UI Example](Images/UI.png)
+![UI Example](https://i.imgur.com/MDUBZeZ.png)
 
 #### Additional
 
