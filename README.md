@@ -4,7 +4,7 @@ It consists of 2 parts:
 1) Formatter for **JSON**
 2) Pagination using **Github Search API**
 
-Project was made by using [HapiJS](https://hapi.dev/) framework. 
+Project was made by using [HapiJS](https://hapi.dev/) framework.
 
 ## Table of Contents
 
@@ -13,6 +13,7 @@ Project was made by using [HapiJS](https://hapi.dev/) framework.
 - [Installation](#installation)
 - [Running](#running)
 - [Author](#author)
+- [Codebase Documentation](https://static.adigame.dev/docs/github-paginator/)
 
 ## Getting Started
 
