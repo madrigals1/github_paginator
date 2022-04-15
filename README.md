@@ -13,7 +13,7 @@ Project was made by using [HapiJS](https://hapi.dev/) framework.
 - [Installation](#installation)
 - [Running](#running)
 - [Author](#author)
-- [Codebase Documentation](https://static.adigame.dev/docs/github-paginator/)
+- [Codebase Documentation](https://static.madrigal.pro/docs/github-paginator/)
 
 ## Getting Started
 
